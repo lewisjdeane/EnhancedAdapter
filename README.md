@@ -19,7 +19,7 @@ allprojects {
 
 In your app-specific build.gradle:
 
-`implementation 'com.github.lewisjdeane:EnhancedAdapter:1.0'`
+`implementation 'com.github.lewisjdeane:EnhancedAdapter:1.0.1'`
 
 ## Usage
 
