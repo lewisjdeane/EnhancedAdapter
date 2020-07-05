@@ -23,23 +23,29 @@ In your app-specific build.gradle:
 
 ## Usage
 
-### Basic
-
-The simplest way to get started with an EnhancedAdapter is to provide a LiveData list of elements:
-
 ```kotlin
-// Create the adapter by passing in a LiveData list of items.
-val adapter = EnhancedAdapter(context, liveItems)
+// Override the base EnhancedAdapter class and implement the layoutRes variable and bind method.
+class MyAdapter(
+    context: Context,
+    liveItems: LiveData<YourItem>,
+    placeholder: View? = null, // Optional.
+    onItemClickListener: OnItemClickListener? = null // Optional.
+) : EnhancedAdapter(context, liveItems, placeholder, onItemClickListener) {
+    
+    // Tell the adapter what view you wish to inflate for elements.
+    override val layoutRes = R.layout.your_item_layout
+    
+    // Setup the view you've inflated with a given item.
+    override fun bind(view: View, item: YourItem) {
+        val title = view.findViewById(R.id.title_id)
+        val message = view.findViewById(R.id.message_id)
+        
+        title.text = item.title
+        message.text = item.message
+    }
+}
 
-// Set the adapter on the RecyclerView.
-recyclerView.adapter = adapter
-```
-
-### Handling clicks
-
-Sometimes you need to handle clicks to items in your list, with EnhancedAdapter, this is simple:
-
-```kotlin
+// Define your click listener.
 val onItemClickedListener =
     object : EnhancedAdapter.OnItemClickedListener {
         override fun onClick(item: Item) {
@@ -47,20 +53,8 @@ val onItemClickedListener =
         }
     }
 
-// Create the adapter by passing in a LiveData list of items and a click listener.
-val adapter = EnhancedAdapter(context, liveItems, onItemClickedListener)
-
-// Set the adapter on the RecyclerView.
-recyclerView.adapter = adapter
-```
-
-### Setting a placeholder when there are no elements in the list
-
-If you wish to display a placeholder view when there are no elements in the list, this is also trivial with EnhancedAdapter:
-
-```kotlin
-// Create the adapter by passing in a LiveData list of items and a placeholder view.
-val adapter = EnhancedAdapter(context, liveItems, placeholder)
+// Create the adapter by passing in a LiveData list of items, an optional placeholder view and an optional click listener.
+val adapter = MyAdapter(context, liveItems, placeholder, onItemClickListener)
 
 // Set the adapter on the RecyclerView.
 recyclerView.adapter = adapter
